@@ -106,7 +106,7 @@ function updateCartDisplay() {
     totalPrice.textContent = '₹' + cart.getTotal();
 }
 
-//  FREE UPI Payment Integration
+//  Dodo Payments Integration
 function proceedToCheckout() {
     if (cart.items.length === 0) {
         alert('Your cart is empty!');
@@ -116,62 +116,118 @@ function proceedToCheckout() {
     const amount = cart.getTotal();
     const orderId = 'KAI' + Date.now();
     
-    showPaymentModal(amount, orderId);
+    // Create Dodo Payments checkout
+    initiateDodoPayment(amount, orderId);
 }
 
-function showPaymentModal(amount, orderId) {
+function initiateDodoPayment(amount, orderId) {
+    // Dodo Payments configuration
+    const DODO_BUSINESS_ID = 'your_business_id_here'; // Get from https://app.dodopayments.com
+    
+    // Create checkout session
+    const checkoutData = {
+        amount: amount,
+        currency: 'INR',
+        orderId: orderId,
+        description: 'Agricultural Medicines - Kissan AI',
+        customerEmail: 'customer@example.com', // Can be dynamic
+        successUrl: window.location.href + '?payment=success',
+        cancelUrl: window.location.href + '?payment=cancel',
+        items: cart.items.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            size: item.packSize
+        }))
+    };
+    
+    // Show Dodo Payments modal
+    showDodoPaymentModal(checkoutData);
+}
+
+function showDodoPaymentModal(checkoutData) {
     const modal = document.createElement('div');
-    modal.className = 'payment-modal';
+    modal.className = 'payment-modal show';
     modal.id = 'paymentModal';
     modal.innerHTML = `
-        <div class="payment-modal-content">
+        <div class="payment-modal-content" style="max-width: 600px;">
             <div class="payment-header">
-                <h2>💳 Choose Payment Method</h2>
+             <h2>💳 Complete Your Purchase</h2>
                 <button class="close-modal-btn" onclick="closePaymentModal()">✕</button>
             </div>
             
-            <div class="payment-amount">
-                <span>Total Amount:</span>
-                <span class="amount">₹${amount}</span>
-            </div>
-            
-            <div class="payment-methods">
-                <button class="payment-method-btn phonepe" onclick="payWithUPI('phonepe', ${amount}, '${orderId}')">
-                    <span class="payment-icon">📱</span>
-                    <span class="payment-name">PhonePe</span>
-                    <span class="payment-tag">FREE</span>
-                </button>
+            <div class="dodo-payment-container">
+                <div class="order-summary">
+                    <h3>Order Summary</h3>
+                    <div class="order-items">
+                        ${checkoutData.items.map(item => `
+                            <div class="order-item">
+                                <span>${item.name} (${item.size})</span>
+                                <span>₹${item.price} × ${item.quantity}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-total">
+                        <strong>Total:</strong>
+                        <strong>₹${checkoutData.amount}</strong>
+                    </div>
+                </div>
                 
-                <button class="payment-method-btn gpay" onclick="payWithUPI('gpay', ${amount}, '${orderId}')">
-                    <span class="payment-icon">🔵</span>
-                    <span class="payment-name">Google Pay</span>
-                    <span class="payment-tag">FREE</span>
-                </button>
-                
-                <button class="payment-method-btn paytm" onclick="payWithUPI('paytm', ${amount}, '${orderId}')">
-                    <span class="payment-icon">💙</span>
-                    <span class="payment-name">Paytm</span>
-                    <span class="payment-tag">FREE</span>
-                </button>
-                
-                <button class="payment-method-btn upi" onclick="payWithUPI('upi', ${amount}, '${orderId}')">
-                    <span class="payment-icon">💰</span>
-                    <span class="payment-name">Any UPI App</span>
-                    <span class="payment-tag">FREE</span>
-                </button>
-            </div>
-            
-            <div class="payment-note">
-                ✅ Zero transaction fees<br>
-                ✅ Instant payment confirmation<br>
-                ✅ Secure UPI payment
+                <div class="payment-message">
+                    <div class="info-box">
+                        <h4>🎉 Dodo Payments - Secure Checkout</h4>
+                        <p>✅ Multiple payment methods</p>
+                        <p>✅ UPI, Cards, Net Banking, Wallets</p>
+                        <p>✅ Secure & encrypted</p>
+                        <p>✅ Instant confirmation</p>
+                    </div>
+                    
+                    <div class="demo-notice">
+                        <p><strong>📌 Demo Mode:</strong></p>
+                        <p>To use Dodo Payments:</p>
+                        <ol style="text-align: left; margin: 12px 20px;">
+                            <li>Sign up at <a href="https://app.dodopayments.com/signup" target="_blank">app.dodopayments.com</a></li>
+                            <li>Get your Business ID</li>
+                            <li>Add it to <code>shop-payment.js</code> (line 119)</li>
+                            <li>Integrate Dodo SDK for live payments</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="payment-actions" style="margin-top: 24px;">
+                        <button class="payment-done-btn" onclick="simulateDodoPayment('${checkoutData.orderId}')">
+                            ✅ Continue to Payment
+                        </button>
+                        <button class="payment-cancel-btn" onclick="closePaymentModal()">
+                            ❌ Cancel
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 16px; font-size: 0.75rem; color: #6b7280;">
+                        <p>Powered by <strong>Dodo Payments</strong></p>
+                        <p>Accepts: UPI, Cards, Net Banking, Wallets</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="payment-overlay" onclick="closePaymentModal()"></div>
     `;
     
     document.body.appendChild(modal);
-    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function simulateDodoPayment(orderId) {
+    // In production, this would call Dodo Payments API
+    // For demo, we simulate success
+    
+    closePaymentModal();
+    
+    // Show success message
+    setTimeout(() => {
+        alert(`✅ Payment Successful!\n\nOrder ID: ${orderId}\n\nThank you for your purchase!\n\n💡 To enable real payments, integrate Dodo Payments SDK from:\nhttps://docs.dodopayments.com`);
+        cart.clear();
+        closeCart();
+        updateCartDisplay();
+    }, 500);
 }
 
 function closePaymentModal() {
@@ -180,85 +236,6 @@ function closePaymentModal() {
         modal.classList.remove('show');
         setTimeout(() => modal.remove(), 300);
     }
-}
-
-function payWithUPI(app, amount, orderId) {
-    const upiId = 'kissanai@paytm'; // Replace with your UPI ID
-    const merchantName = 'Kissan AI';
-    const transactionNote = `Order ${orderId}`;
-    
-    // Create UPI intent URL
-    let upiUrl = '';
-    
-    switch(app) {
-        case 'phonepe':
-            upiUrl = `phonepe://pay?pa=${upiId}&pn=${merchantName}&am=${amount}&tn=${transactionNote}&cu=INR`;
-            break;
-        case 'gpay':
-            upiUrl = `gpay://upi/pay?pa=${upiId}&pn=${merchantName}&am=${amount}&tn=${transactionNote}&cu=INR`;
-            break;
-        case 'paytm':
-            upiUrl = `paytmmp://pay?pa=${upiId}&pn=${merchantName}&am=${amount}&tn=${transactionNote}&cu=INR`;
-            break;
-        case 'upi':
-        default:
-            upiUrl = `upi://pay?pa=${upiId}&pn=${merchantName}&am=${amount}&tn=${transactionNote}&cu=INR`;
-            break;
-    }
-    
-    // Create QR code as fallback (for desktop)
-    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiUrl)}`;
-    
-    closePaymentModal();
-    
-    // Show payment confirmation/QR modal
-    const confirmModal = document.createElement('div');
-    confirmModal.className = 'payment-modal show';
-    confirmModal.id = 'paymentModal';
-    confirmModal.innerHTML = `
-        <div class="payment-modal-content">
-            <div class="payment-header">
-                <h2>💳 Complete Payment</h2>
-            </div>
-            
-            <div class="payment-instructions">
-                <p style="text-align:center; margin: 20px 0;">
-                    Opening ${app.toUpperCase()}...<br>
-                    Complete payment in the app
-                </p>
-                
-                <div class="qr-section">
-                    <p>Or scan this QR code:</p>
-                    <img src="${qrCodeUrl}" alt="UPI QR Code" class="upi-qr-code">
-                    <p class="upi-id">UPI ID: ${upiId}</p>
-                    <p class="amount-display">₹${amount}</p>
-                </div>
-                
-                <div class="payment-actions">
-                    <button class="payment-done-btn" onclick="confirmPaymentDone('${orderId}')">
-                        ✅ I've Completed Payment
-                    </button>
-                    <button class="payment-cancel-btn" onclick="closePaymentModal()">
-                        ❌ Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="payment-overlay" onclick="closePaymentModal()"></div>
-    `;
-    
-    document.body.appendChild(confirmModal);
-    
-    // Try to open UPI app
-    window.location.href = upiUrl;
-}
-
-function confirmPaymentDone(orderId) {
-    alert(`✅ Order Placed Successfully!\n\nOrder ID: ${orderId}\n\nThank you for your purchase! Your medicines will be delivered soon.`);
-    cart.clear();
-    closeCart();
-    closePaymentModal();
-    updateCartDisplay();
 }
 
 // Initialize

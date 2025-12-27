@@ -1,0 +1,15 @@
+/* Language Selector Position Fix */
+.language-selector {
+    position: fixed;
+    top: 80px;
+    /* Move down to avoid logo collision */
+    right: 20px;
+    z-index: 100;
+}
+
+@media (max-width: 768px) {
+    .language-selector {
+        top: 70px;
+        right: 10px;
+    }
+}

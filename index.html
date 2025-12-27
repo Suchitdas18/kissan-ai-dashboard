@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,36 +10,59 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="translations.js"></script>
 </head>
+
 <body class="role-selection-page">
     <div class="container">
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <button class="language-btn" id="languageBtn">
+                <span class="language-icon">🌐</span>
+                <span class="language-text" id="currentLanguage">English</span>
+                <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="language-dropdown hidden" id="languageDropdown">
+                <div class="language-option" data-lang="en">English</div>
+                <div class="language-option" data-lang="hi">हिंदी (Hindi)</div>
+                <div class="language-option" data-lang="bn">বাংলা (Bengali)</div>
+                <div class="language-option" data-lang="ta">தமிழ் (Tamil)</div>
+                <div class="language-option" data-lang="te">తెలుగు (Telugu)</div>
+                <div class="language-option" data-lang="mr">मराठी (Marathi)</div>
+                <div class="language-option" data-lang="gu">ગુજરાતી (Gujarati)</div>
+                <div class="language-option" data-lang="kn">ಕನ್ನಡ (Kannada)</div>
+                <div class="language-option" data-lang="pa">ਪੰਜਾਬੀ (Punjabi)</div>
+            </div>
+        </div>
+
         <!-- Header with branding -->
         <header class="role-header">
             <div class="logo-container">
                 <div class="logo-icon">🌾</div>
-                <h1 class="app-name">Kissan AI</h1>
+                <h1 class="app-name" id="appName">Kissan AI</h1>
             </div>
-            <p class="tagline">Smart Farming Solutions</p>
+            <p class="tagline" id="tagline">Smart Farming Solutions</p>
         </header>
 
         <!-- Role Selection Section -->
         <main class="role-selection-container">
-            <h2 class="selection-title">आप कौन हैं?<br><span class="subtitle-en">Who are you?</span></h2>
-            
+            <h2 class="selection-title" id="selectionTitle">आप कौन हैं?<br><span class="subtitle-en">Who are you?</span>
+            </h2>
+
             <div class="role-cards">
                 <!-- Farmer Card -->
                 <a href="farmer.html" class="role-card farmer-card">
                     <div class="card-icon">👨‍🌾</div>
-                    <h3 class="card-title">किसान<br><span>Farmer</span></h3>
-                    <p class="card-desc">फसल और मिट्टी की जानकारी</p>
+                    <h3 class="card-title" id="farmerTitle">किसान<br><span>Farmer</span></h3>
+                    <p class="card-desc" id="farmerDesc">फसल और मिट्टी की जानकारी</p>
                     <div class="card-arrow">→</div>
                 </a>
 
                 <!-- Mandi/Wholesaler Card -->
                 <a href="mandi.html" class="role-card mandi-card">
                     <div class="card-icon">🏪</div>
-                    <h3 class="card-title">मंडी / थोक व्यापारी<br><span>Mandi / Wholesaler</span></h3>
-                    <p class="card-desc">फसल खरीदें और बेचें</p>
+                    <h3 class="card-title" id="mandiTitle">मंडी / थोक व्यापारी<br><span>Mandi / Wholesaler</span></h3>
+                    <p class="card-desc" id="mandiDesc">फसल खरीदें और बेचें</p>
                     <div class="card-arrow">→</div>
                 </a>
             </div>
@@ -46,8 +70,64 @@
 
         <!-- Footer -->
         <footer class="role-footer">
-            <p>सभी भारतीय किसानों के लिए बनाया गया 🇮🇳</p>
+            <p id="footerText">सभी भारतीय किसानों के लिए बनाया गया 🇮🇳</p>
         </footer>
     </div>
+
+    <script>
+        // Initialize translations on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const lang = getCurrentLanguage();
+
+            // Update UI with current language
+            document.getElementById('currentLanguage').textContent = languageNames[lang];
+            document.getElementById('appName').textContent = t('appName');
+            document.getElementById('tagline').textContent = t('appTagline');
+            document.getElementById('selectionTitle').innerHTML = t('whoAreYou');
+            document.getElementById('footerText').textContent = 'Made for Indian Farmers 🇮🇳';
+
+            // Update role cards based on language
+            const farmerTitle = document.getElementById('farmerTitle');
+            const mandiTitle = document.getElementById('mandiTitle');
+
+            if (lang === 'en') {
+                farmerTitle.innerHTML = 'Farmer<br><span>किसान</span>';
+                mandiTitle.innerHTML = 'Mandi/Wholesaler<br><span>मंडी/थोक विक्रेता</span>';
+            } else {
+                farmerTitle.innerHTML = t('farmer') + '<br><span>' + t('farmerHindi') + '</span>';
+                mandiTitle.innerHTML = t('mandi') + '<br><span>' + t('mandiHindi') + '</span>';
+            }
+
+            // Language dropdown toggle
+            const languageBtn = document.getElementById('languageBtn');
+            const languageDropdown = document.getElementById('languageDropdown');
+
+            languageBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                languageDropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function () {
+                languageDropdown.classList.add('hidden');
+            });
+
+            // Language selection
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const selectedLang = this.getAttribute('data-lang');
+                    changeLanguage(selectedLang);
+                });
+
+                // Highlight current language
+                if (option.getAttribute('data-lang') === lang) {
+                    option.style.background = 'var(--farmer-light)';
+                    option.style.fontWeight = '700';
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

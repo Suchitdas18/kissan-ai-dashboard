@@ -1,3 +1,99 @@
+// Search by Disease - Recommend medicines sorted by price
+function searchByDisease() {
+    const diseaseInput = document.getElementById('diseaseSearch').value.trim();
+    
+    if (!diseaseInput) {
+        alert('Please enter a disease name');
+        return;
+    }
+    
+    // Find medicines for this disease
+    const allMedicines = getAllMedicines();
+    const matchedMedicines = allMedicines.filter(med => {
+        if (med.disease) {
+            return med.disease.some(d => d.toLowerCase().includes(diseaseInput.toLowerCase()));
+        }
+        if (med.pest) {
+            return med.pest.some(p => p.toLowerCase().includes(diseaseInput.toLowerCase()));
+        }
+        return false;
+    });
+    
+    if (matchedMedicines.length === 0) {
+        showNoResults(diseaseInput);
+        return;
+    }
+    
+    // Sort by lowest price (take minimum price from pack sizes)
+    matchedMedicines.sort((a, b) => {
+        const minPriceA = Math.min(...Object.values(a.price));
+        const minPriceB = Math.min(...Object.values(b.price));
+        return minPriceA - minPriceB;
+    });
+    
+    // Show recommendations
+    showRecommendations(diseaseInput, matchedMedicines);
+}
+
+function showRecommendations(disease, medicines) {
+    const section = document.getElementById('diseaseRecommendations');
+    const title = document.getElementById('recommendationTitle');
+    const grid = document.getElementById('recommendationGrid');
+    
+    title.textContent = `💊 Medicines for "${disease}" (Sorted: Lowest to Highest Price)`;
+    
+    grid.innerHTML = medicines.map((med, index) => {
+        const minPrice = Math.min(...Object.values(med.price));
+        const maxPrice = Math.max(...Object.values(med.price));
+        const priceRange = minPrice === maxPrice ? `₹${minPrice}` : `₹${minPrice} - ₹${maxPrice}`;
+        
+        return `
+            <div class="recommendation-card" data-rank="${index + 1}">
+                <div class="rec-rank">#${index + 1}</div>
+                <div class="rec-icon">${med.image}</div>
+                <h4 class="rec-name">${med.brand}</h4>
+                <p class="rec-generic">${med.name}</p>
+                <div class="rec-price">${priceRange}</div>
+                <div class="rec-rating">⭐ ${med.rating}/5</div>
+                ${index === 0 ? '<div class="best-price-badge">💰 Best Price</div>' : ''}
+                <button class="rec-add-btn" onclick="quickAddToCart('${med.id}')">
+                    Quick Add to Cart
+                </button>
+            </div>
+        `;
+    }).join('');
+    
+    section.classList.remove('hidden');
+    section.scrollIntoView({ behavior: 'smooth' });
+}
+
+function showNoResults(disease) {
+    const section = document.getElementById('diseaseRecommendations');
+    const title = document.getElementById('recommendationTitle');
+    const grid = document.getElementById('recommendationGrid');
+    
+    title.textContent = `No medicines found for "${disease}"`;
+    grid.innerHTML = `
+        <p style="text-align: center; color: #6b7280; padding: 40px;">
+            We couldn't find any medicines for this disease.<br>
+            Try searching for: Rust, Blight, Blast, Aphids, Whitefly, Stem Borer, etc.
+        </p>
+    `;
+    
+    section.classList.remove('hidden');
+    section.scrollIntoView({ behavior: 'smooth' });
+}
+
+function quickAddToCart(medicineId) {
+    const medicine = getMedicineById(medicineId);
+    if (!medicine) return;
+    
+    // Add first pack size by default
+    const defaultPack = medicine.packSize[0];
+    cart.addItem(medicineId, defaultPack, 1);
+    updateCartDisplay();
+}
+
 // Load and display products
 function loadProducts(category = 'all', searchQuery = '') {
     const grid = document.getElementById('productsGrid');

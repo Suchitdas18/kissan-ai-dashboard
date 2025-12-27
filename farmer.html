@@ -7,6 +7,7 @@
     <title>Farmer Dashboard - Kissan AI</title>
     <meta name="description" content="Farmer dashboard for crop disease detection and market access">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="medicine-icon.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -46,7 +47,6 @@
                 <h1 class="app-name" id="appName">🌾 Kissan AI</h1>
                 <p class="subtitle" id="subtitle">Smart Crop & Soil Decisions</p>
             </div>
-            <a href="shop.html" class="shop-link-btn" title="Medicine Shop">🏪</a>
             <div class="profile-icon">👤</div>
         </header>
 
@@ -146,26 +146,6 @@
                 </div>
             </section>
 
-            <!-- Medicine Shop Quick Access -->
-            <section class="card shop-quick-card">
-                <div class="card-header">
-                    <h2 class="card-title">🏪 Medicine Shop</h2>
-                    <p class="card-subtitle">खाद और दवाइयाँ खरीदें</p>
-                </div>
-                <div class="card-body">
-                    <div class="shop-features-simple">
-                        <div class="shop-feature-simple">💊 Pesticides & Fungicides</div>
-                        <div class="shop-feature-simple">🌿 Organic Solutions</div>
-                        <div class="shop-feature-simple">🧴 Fertilizers & Nutrition</div>
-                        <div class="shop-feature-simple">💳 UPI & Free Payment</div>
-                    </div>
-                    <a href="shop.html" class="shop-enter-btn">
-                        <span class="btn-icon">🛒</span>
-                        <span class="btn-text">Browse Products</span>
-                        <span class="btn-arrow">→</span>
-                    </a>
-                </div>
-            </section>
 
             <!-- Soil Intelligence Section -->
             <section class="card soil-card">
@@ -251,6 +231,13 @@
             </section>
         </main>
     </div>
+
+
+    <!-- Floating Medicine Shop Button -->
+    <a href="shop.html" class="floating-medicine-btn" title="Medicine Shop - खाद और दवाइयाँ खरीदें">
+        <span class="medicine-icon">💊</span>
+        <span class="medicine-text">Medicines</span>
+    </a>
 
     <script src="script.js"></script>
     <script src="farmer-lang-init.js"></script>

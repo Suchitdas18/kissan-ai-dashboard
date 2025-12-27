@@ -1,0 +1,66 @@
+/* Floating Medicine Shop Button */
+.floating-medicine-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #ec4899 0%, #dc2626 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(236, 72, 153, 0.4);
+    z-index: 999;
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.floating-medicine-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 32px rgba(236, 72, 153, 0.6);
+    animation: none;
+}
+
+.medicine-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.medicine-text {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 24px rgba(236, 72, 153, 0.4);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 12px 32px rgba(236, 72, 153, 0.6);
+    }
+}
+
+@media (max-width: 768px) {
+    .floating-medicine-btn {
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 16px;
+    }
+
+    .medicine-icon {
+        font-size: 1.5rem;
+    }
+
+    .medicine-text {
+        font-size: 0.875rem;
+    }
+}

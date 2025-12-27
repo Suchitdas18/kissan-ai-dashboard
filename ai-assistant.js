@@ -229,10 +229,32 @@ class VoiceAssistant {
     }
     
     async getAIResponse(userMessage) {
-        // This is a simple rule-based system
-        // You can replace this with actual Gemini API call
+        const lang = getCurrentLanguage();
+        let response;
         
-        const response = this.generateResponse(userMessage.toLowerCase());
+        // Try Gemini API first for intelligent responses
+        if (window.callGeminiAPI) {
+            try {
+                response = await window.callGeminiAPI(userMessage, lang);
+                
+                // If API returns a response, use it
+                if (response) {
+                    this.hideTyping();
+                    this.addMessage('assistant', response);
+                    
+                    // Auto-speak response
+                    setTimeout(() => {
+                        this.speak(response);
+                    }, 500);
+                    return;
+                }
+            } catch (error) {
+                console.log('Gemini API failed, using local knowledge base:', error);
+            }
+        }
+        
+        // Fallback to local knowledge base
+        response = this.generateResponse(userMessage.toLowerCase());
         
         this.hideTyping();
         this.addMessage('assistant', response);

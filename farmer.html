@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - Kissan AI</title>
+    <meta name="description" content="Farmer dashboard for crop disease detection and market access">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="farmer-page">
+    <div class="dashboard-container">
+        <!-- Top Header -->
+        <header class="dashboard-header farmer-header">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="header-content">
+                <h1 class="app-name">🌾 Kissan AI</h1>
+                <p class="subtitle">Smart Crop & Soil Decisions</p>
+            </div>
+            <div class="profile-icon">👤</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Crop Selection Section -->
+            <section class="card crop-selection-card">
+                <div class="card-header">
+                    <h2 class="card-title">🌱 Select Your Crop</h2>
+                    <p class="card-subtitle">कृपया अपनी फसल चुनें</p>
+                </div>
+                <div class="card-body">
+                    <!-- Crop Type Tabs -->
+                    <div class="crop-type-tabs">
+                        <button class="crop-tab active" data-type="plants">
+                            <span class="tab-icon">🌾</span>
+                            <span class="tab-label">Plants<br><small>फसल</small></span>
+                        </button>
+                        <button class="crop-tab" data-type="vegetables">
+                            <span class="tab-icon">🥬</span>
+                            <span class="tab-label">Vegetables<br><small>सब्जी</small></span>
+                        </button>
+                    </div>
+
+                    <!-- Search Box -->
+                    <div class="crop-search-container">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="cropSearchInput" class="crop-search-input"
+                            placeholder="Search crop / फसल खोजें..." autocomplete="off">
+                        <button class="clear-search-btn" id="clearSearchBtn" style="display: none;">✕</button>
+                    </div>
+
+                    <!-- Plants Options -->
+                    <div class="crop-options" id="plantsOptions">
+                        <button class="crop-option-btn" data-crop="wheat">
+                            <span class="option-icon">🌾</span>
+                            <span class="option-name">Wheat<br><small>गेहूं</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="rice">
+                            <span class="option-icon">🌾</span>
+                            <span class="option-name">Rice<br><small>धान</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="corn">
+                            <span class="option-icon">🌽</span>
+                            <span class="option-name">Corn<br><small>मक्का</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="sugarcane">
+                            <span class="option-icon">🎋</span>
+                            <span class="option-name">Sugarcane<br><small>गन्ना</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="cotton">
+                            <span class="option-icon">☁️</span>
+                            <span class="option-name">Cotton<br><small>कपास</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="mustard">
+                            <span class="option-icon">🌻</span>
+                            <span class="option-name">Mustard<br><small>सरसों</small></span>
+                        </button>
+                    </div>
+
+                    <!-- Vegetables Options (hidden by default) -->
+                    <div class="crop-options hidden" id="vegetablesOptions">
+                        <button class="crop-option-btn" data-crop="tomato">
+                            <span class="option-icon">🍅</span>
+                            <span class="option-name">Tomato<br><small>टमाटर</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="potato">
+                            <span class="option-icon">🥔</span>
+                            <span class="option-name">Potato<br><small>आलू</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="onion">
+                            <span class="option-icon">🧅</span>
+                            <span class="option-name">Onion<br><small>प्याज</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="cabbage">
+                            <span class="option-icon">🥬</span>
+                            <span class="option-name">Cabbage<br><small>पत्तागोभी</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="cauliflower">
+                            <span class="option-icon">🥦</span>
+                            <span class="option-name">Cauliflower<br><small>फूलगोभी</small></span>
+                        </button>
+                        <button class="crop-option-btn" data-crop="eggplant">
+                            <span class="option-icon">🍆</span>
+                            <span class="option-name">Eggplant<br><small>बैंगन</small></span>
+                        </button>
+                    </div>
+
+                    <p class="selected-crop-display">Selected: <strong id="selectedCropName">None</strong></p>
+
+                    <!-- Confirm Button -->
+                    <button class="confirm-crop-btn" id="confirmCropBtn" disabled>
+                        <span class="btn-icon">✓</span>
+                        <span class="btn-text">Confirm & Continue</span>
+                        <span class="btn-subtext">आगे बढ़ें</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Soil Intelligence Section -->
+            <section class="card soil-card">
+                <div class="card-header">
+                    <h2 class="card-title">🌱 Soil Intelligence</h2>
+                </div>
+                <div class="card-body">
+                    <div class="soil-score">
+                        <div class="score-circle">
+                            <span class="score-value">78</span>
+                            <span class="score-label">Health Score</span>
+                        </div>
+                    </div>
+                    <div class="soil-metrics">
+                        <div class="metric">
+                            <span class="metric-icon">🧪</span>
+                            <span class="metric-label">NPK</span>
+                            <span class="coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-icon">⚗️</span>
+                            <span class="metric-label">pH</span>
+                            <span class="coming-soon">Coming Soon</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-icon">💧</span>
+                            <span class="metric-label">Moisture</span>
+                            <span class="coming-soon">Coming Soon</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Market Access -->
+            <section class="card market-card">
+                <div class="card-header">
+                    <h2 class="card-title">🏪 Market Access</h2>
+                </div>
+                <div class="card-body">
+                    <button class="action-btn find-buyers-btn">
+                        <span class="btn-icon">🔍</span>
+                        <span class="btn-text">Find Nearby Buyers</span>
+                    </button>
+
+                    <div class="buyers-list">
+                        <div class="buyer-item">
+                            <div class="buyer-info">
+                                <p class="buyer-name">Ram Traders</p>
+                                <p class="buyer-location">📍 5 km away</p>
+                            </div>
+                            <a href="tel:+91XXXXXXXXXX" class="contact-btn">📞 Call</a>
+                        </div>
+                        <div class="buyer-item">
+                            <div class="buyer-info">
+                                <p class="buyer-name">Shyam Mandi</p>
+                                <p class="buyer-location">📍 8 km away</p>
+                            </div>
+                            <a href="tel:+91XXXXXXXXXX" class="contact-btn">📞 Call</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Farmer Summary -->
+            <section class="card summary-card">
+                <div class="card-header">
+                    <h2 class="card-title">📊 Your Summary</h2>
+                </div>
+                <div class="card-body">
+                    <div class="summary-item">
+                        <span class="summary-label">Crop Health</span>
+                        <span class="summary-value health-good">Good ✓</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Next Step</span>
+                        <span class="summary-value">Apply fertilizer in 3 days</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Best Harvest Time</span>
+                        <span class="summary-value">15 days</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Analysis - Kissan AI</title>
+    <meta name="description" content="Upload crop image for AI-powered disease detection">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="farmer-page analysis-page">
+    <div class="dashboard-container">
+        <!-- Top Header -->
+        <header class="dashboard-header farmer-header">
+            <a href="farmer.html" class="back-btn">←</a>
+            <div class="header-content">
+                <h1 class="app-name">🌾 Kissan AI</h1>
+                <p class="subtitle">Crop Disease Analysis</p>
+            </div>
+            <div class="profile-icon">👤</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Selected Crop Info -->
+            <section class="selected-crop-info">
+                <div class="info-badge">
+                    <span class="crop-emoji" id="selectedCropEmoji">🌾</span>
+                    <span class="crop-text">
+                        <strong id="displayCropName">Wheat</strong>
+                        <small>Selected Crop / चयनित फसल</small>
+                    </span>
+                </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section class="card upload-section">
+                <div class="card-header">
+                    <h2 class="card-title">📸 Upload Crop Image</h2>
+                    <p class="card-subtitle">फसल की तस्वीर अपलोड करें</p>
+                </div>
+                <div class="card-body">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <div class="upload-icon">📷</div>
+                            <h3>Tap to Upload Photo</h3>
+                            <p>तस्वीर अपलोड करें</p>
+                            <button class="upload-trigger-btn" id="uploadTriggerBtn">
+                                Choose Image
+                            </button>
+                        </div>
+                        <div class="image-preview hidden" id="imagePreview">
+                            <img src="" alt="Crop image" id="previewImage">
+                            <button class="remove-image-btn" id="removeImageBtn">✕</button>
+                        </div>
+                        <input type="file" id="cropImageInput" accept="image/*" style="display: none;">
+                    </div>
+
+                    <button class="analyze-btn" id="analyzeBtn" disabled>
+                        <span class="btn-icon">🔬</span>
+                        <span class="btn-text">Analyze Crop</span>
+                        <span class="btn-subtext">फसल का विश्लेषण करें</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Analysis Results (Initially Hidden) -->
+            <section class="card disease-card hidden" id="resultsSection">
+                <div class="card-header">
+                    <h2 class="card-title">🔬 Disease Detection</h2>
+                    <span class="status-badge ai-verified">AI Verified</span>
+                </div>
+                <div class="card-body">
+                    <div class="disease-result">
+                        <div class="disease-info">
+                            <p class="disease-name" id="diseaseName">Leaf Blight Detected</p>
+                            <div class="severity-indicator severity-medium" id="severityIndicator">
+                                <span class="severity-dot"></span>
+                                <span class="severity-text" id="severityText">Medium Severity</span>
+                            </div>
+                        </div>
+                        <div class="treatment-advice">
+                            <h3 class="advice-title">💊 Treatment Recommendations</h3>
+                            <p class="advice-subtitle">उपचार सुझाव</p>
+                            <ul class="advice-list" id="adviceList">
+                                <li>Apply copper-based fungicide</li>
+                                <li>Remove infected leaves</li>
+                                <li>Increase plant spacing</li>
+                            </ul>
+                        </div>
+                        <div class="prevention-tips">
+                            <h3 class="prevention-title">🛡️ Prevention Tips</h3>
+                            <p class="prevention-subtitle">रोकथाम के उपाय</p>
+                            <ul class="prevention-list" id="preventionList">
+                                <li>Maintain proper air circulation</li>
+                                <li>Water plants at the base, not leaves</li>
+                                <li>Remove plant debris regularly</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <section class="action-buttons hidden" id="actionButtons">
+                <button class="secondary-btn" onclick="window.location.href='farmer.html'">
+                    🏠 Back to Dashboard
+                </button>
+                <button class="primary-btn" id="analyzeAnotherBtn">
+                    🔄 Analyze Another
+                </button>
+            </section>
+        </main>
+    </div>
+
+    <script src="crop-analysis.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandi Dashboard - Kissan AI</title>
+    <meta name="description" content="Wholesaler dashboard for crop discovery and deals">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="mandi-page">
+    <div class="dashboard-container">
+        <!-- Top Header -->
+        <header class="dashboard-header mandi-header">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="header-content">
+                <h1 class="app-name">🏪 Kissan AI</h1>
+                <p class="subtitle">Wholesale Market Platform</p>
+            </div>
+            <div class="profile-icon">👤</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Available Crops Section -->
+            <section class="card crops-card">
+                <div class="card-header">
+                    <h2 class="card-title">🌾 Available Crops Near You</h2>
+                    <button class="filter-btn">🔍</button>
+                </div>
+                <div class="card-body">
+                    <!-- Crop Item 1 -->
+                    <div class="crop-item">
+                        <div class="crop-header">
+                            <div class="crop-icon">🌾</div>
+                            <div class="crop-details">
+                                <h3 class="crop-type">Wheat (गेहूं)</h3>
+                                <p class="crop-quantity">500 kg available</p>
+                            </div>
+                            <span class="health-badge health-excellent">
+                                <span class="health-dot"></span>
+                                Excellent
+                            </span>
+                        </div>
+                        <div class="crop-meta">
+                            <span class="crop-location">📍 Rajpura, 12 km</span>
+                            <span class="ai-badge">✓ AI Verified</span>
+                        </div>
+                        <div class="crop-actions">
+                            <button class="action-btn call-btn">
+                                <span class="btn-icon">📞</span>
+                                <span>Call Farmer</span>
+                            </button>
+                            <button class="action-btn message-btn">
+                                <span class="btn-icon">💬</span>
+                                <span>Message</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Crop Item 2 -->
+                    <div class="crop-item">
+                        <div class="crop-header">
+                            <div class="crop-icon">🌾</div>
+                            <div class="crop-details">
+                                <h3 class="crop-type">Rice (धान)</h3>
+                                <p class="crop-quantity">850 kg available</p>
+                            </div>
+                            <span class="health-badge health-good">
+                                <span class="health-dot"></span>
+                                Good
+                            </span>
+                        </div>
+                        <div class="crop-meta">
+                            <span class="crop-location">📍 Sirhind, 18 km</span>
+                            <span class="ai-badge">✓ AI Verified</span>
+                        </div>
+                        <div class="crop-actions">
+                            <button class="action-btn call-btn">
+                                <span class="btn-icon">📞</span>
+                                <span>Call Farmer</span>
+                            </button>
+                            <button class="action-btn message-btn">
+                                <span class="btn-icon">💬</span>
+                                <span>Message</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Crop Item 3 -->
+                    <div class="crop-item">
+                        <div class="crop-header">
+                            <div class="crop-icon">🫘</div>
+                            <div class="crop-details">
+                                <h3 class="crop-type">Lentils (दाल)</h3>
+                                <p class="crop-quantity">300 kg available</p>
+                            </div>
+                            <span class="health-badge health-good">
+                                <span class="health-dot"></span>
+                                Good
+                            </span>
+                        </div>
+                        <div class="crop-meta">
+                            <span class="crop-location">📍 Patiala, 25 km</span>
+                            <span class="ai-badge">✓ AI Verified</span>
+                        </div>
+                        <div class="crop-actions">
+                            <button class="action-btn call-btn">
+                                <span class="btn-icon">📞</span>
+                                <span>Call Farmer</span>
+                            </button>
+                            <button class="action-btn message-btn">
+                                <span class="btn-icon">💬</span>
+                                <span>Message</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Deals Section -->
+            <section class="card deals-card">
+                <div class="card-header">
+                    <h2 class="card-title">📋 My Deals</h2>
+                    <span class="deals-count">3 Active</span>
+                </div>
+                <div class="card-body">
+                    <div class="deal-item">
+                        <div class="deal-header">
+                            <span class="deal-crop">Wheat - 200 kg</span>
+                            <span class="deal-status status-ongoing">Ongoing</span>
+                        </div>
+                        <p class="deal-farmer">Farmer: Harish Kumar</p>
+                        <p class="deal-date">Started: Dec 20, 2025</p>
+                    </div>
+                    <div class="deal-item">
+                        <div class="deal-header">
+                            <span class="deal-crop">Rice - 600 kg</span>
+                            <span class="deal-status status-completed">Completed</span>
+                        </div>
+                        <p class="deal-farmer">Farmer: Suresh Yadav</p>
+                        <p class="deal-date">Completed: Dec 15, 2025</p>
+                    </div>
+                    <div class="deal-item">
+                        <div class="deal-header">
+                            <span class="deal-crop">Lentils - 150 kg</span>
+                            <span class="deal-status status-ongoing">Ongoing</span>
+                        </div>
+                        <p class="deal-farmer">Farmer: Ramesh Singh</p>
+                        <p class="deal-date">Started: Dec 22, 2025</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Earnings Summary -->
+            <section class="card earnings-card">
+                <div class="card-header">
+                    <h2 class="card-title">💰 Earnings Summary</h2>
+                </div>
+                <div class="card-body">
+                    <div class="earnings-grid">
+                        <div class="earnings-item">
+                            <span class="earnings-label">Total Transaction Value</span>
+                            <span class="earnings-value">₹1,45,000</span>
+                        </div>
+                        <div class="earnings-divider"></div>
+                        <div class="earnings-item">
+                            <span class="earnings-label">Platform Commission (5%)</span>
+                            <span class="earnings-value commission">₹7,250</span>
+                        </div>
+                        <div class="earnings-divider"></div>
+                        <div class="earnings-item">
+                            <span class="earnings-label">Your Net Earnings</span>
+                            <span class="earnings-value net">₹1,37,750</span>
+                        </div>
+                    </div>
+                    <div class="earnings-chart">
+                        <p class="chart-label">This Month's Performance</p>
+                        <div class="chart-bar">
+                            <div class="chart-fill" style="width: 75%"></div>
+                        </div>
+                        <p class="chart-text">75% of monthly target achieved</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

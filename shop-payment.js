@@ -129,15 +129,89 @@ function proceedToCheckout() {
 }
 
 function getUserRole() {
-    // Check if coming from mandi page
-    const referrer = document.referrer;
-    if (referrer.includes('mandi.html')) {
-        return 'mandi';
+    // Check if Mandi user is logged in
+    const currentUser = localStorage.getItem('currentMandiUser');
+    if (currentUser) {
+        const user = JSON.parse(currentUser);
+        return user.businessType; // mandi, wholesaler, distributor, retailer
     }
     
-    // Check localStorage
-    const role = localStorage.getItem('userRole') || 'farmer';
-    return role;
+    // Check if coming from mandi page (but not logged in)
+    const referrer = document.referrer;
+    if (referrer.includes('mandi')) {
+        return 'mandi_unauth'; // Special flag for unauthenticated mandi
+    }
+    
+    // Check localStorage for general role
+    const role = localStorage.getItem('userRole');
+    if (role && (role === 'mandi' || role === 'wholesaler')) {
+        return role;
+    }
+    
+    // Default to farmer
+    return 'farmer';
+}
+
+// Check authentication before allowing Mandi purchase
+function checkMandiAuth(userRole) {
+    if (userRole === 'mandi' || userRole === 'wholesaler' || userRole === 'retailer' || userRole === 'distributor') {
+        // Check if actually logged in
+        const currentUser = localStorage.getItem('currentMandiUser');
+        if (!currentUser) {
+            // Not logged in - redirect to auth page
+            showAuthRequired();
+            return false;
+        }
+        return true;
+    }
+    return true; // Farmers don't need auth
+}
+
+function showAuthRequired() {
+    const modal = document.createElement('div');
+    modal.className = 'payment-modal show';
+    modal.id = 'paymentModal';
+    modal.innerHTML = `
+        <div class="payment-modal-content" style="max-width: 450px; text-align: center;">
+            <div class="payment-header">
+                <h2>🔒 Login Required</h2>
+                <button class="close-modal-btn" onclick="closePaymentModal()">✕</button>
+            </div>
+            
+            <div style="padding: 32px;">
+                <div style="font-size: 4rem; margin: 20px 0;">🏪</div>
+                
+                <h3 style="margin: 20px 0;">Mandi/Wholesaler Login</h3>
+                
+                <p style="color: #6b7280; margin-bottom: 24px; line-height: 1.6;">
+                    To make wholesale purchases, you need to login with your Mandi/Wholesaler account.
+                </p>
+                
+                <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
+                    <h4 style="margin: 0 0 12px 0;">✅ Benefits:</h4>
+                    <ul style="color: #374151; margin: 0; padding-left: 20px;">
+                        <li>Wholesale prices</li>
+                        <li>Bulk order discounts</li>
+                        <li>Business invoices</li>
+                        <li>GST compliance</li>
+                        <li>Credit terms</li>
+                    </ul>
+                </div>
+                
+                <div class="payment-actions">
+                    <a href="mandi-auth.html" class="payment-done-btn" style="text-decoration: none; display: block; text-align: center;">
+                        🔓 Login / Register
+                    </a>
+                    <button class="payment-cancel-btn" onclick="closePaymentModal()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="payment-overlay" onclick="closePaymentModal()"></div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 // FARMER PAYMENT: Simple UPI Scanner
@@ -228,6 +302,70 @@ function confirmFarmerPayment(orderId) {
 
 // MANDI/WHOLESALER PAYMENT: Dodo Payments Required
 function showDodoPaymentRequired(amount, orderId) {
+    const currentUser = JSON.parse(localStorage.getItem('currentMandiUser'));
+    
+    // If user has Dodo Business ID, show actual payment
+    if (currentUser && currentUser.dodoBusinessId && currentUser.dodoRegistered) {
+        showDodoPaymentCheckout(amount, orderId, currentUser);
+    } else {
+        // Show Dodo registration required
+        showDodoRegistrationRequired(amount, orderId, currentUser);
+    }
+}
+
+// Show actual Dodo payment checkout (user has Business ID)
+function showDodoPaymentCheckout(amount, orderId, user) {
+    const modal = document.createElement('div');
+    modal.className = 'payment-modal show';
+    modal.id = 'paymentModal';
+    modal.innerHTML = `
+        <div class="payment-modal-content" style="max-width: 500px;">
+            <div class="payment-header">
+                <h2>💳 Dodo Payments Checkout</h2>
+                <button class="close-modal-btn" onclick="closePaymentModal()">✕</button>
+            </div>
+            
+            <div style="padding: 24px;">
+                <div style="background: #f0f9ff; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="margin: 0; font-size: 0.875rem; color: #374151;">
+                        <strong>${user.businessName}</strong><br>
+                        Business ID: ${user.dodoBusinessId}
+                    </p>
+                </div>
+                
+                <div class="amount-display" style="font-size: 2rem; font-weight: 700; color: #7cb342; margin: 20px 0; text-align: center;">
+                    Total: ₹${amount}
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center;">
+                    <h3 style="margin: 0 0 12px 0;">✅ Ready to Pay</h3>
+                    <p style="margin: 0; font-size: 0.9rem;">Your Dodo Payment account is linked</p>
+                </div>
+                
+                <div style="background: #fff7ed; border: 2px solid #fb923c; padding: 16px; border-radius: 8px; margin: 20px 0;">
+                    <p style="margin: 0; font-size: 0.875rem; color: #78350f;">
+                        <strong>📌 Demo Mode:</strong> In production, this would redirect to Dodo's secure checkout. For now, click "Process Payment" to simulate.
+                    </p>
+                </div>
+                
+                <div class="payment-actions">
+                    <button class="payment-done-btn" onclick="processDodoPayment('${orderId}', '${user.businessName}')">
+                        💳 Process Payment
+                    </button>
+                    <button class="payment-cancel-btn" onclick="closePaymentModal()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="payment-overlay" onclick="closePaymentModal()"></div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Show Dodo registration required (user doesn't have Business ID)
+function showDodoRegistrationRequired(amount, orderId, user) {
     const modal = document.createElement('div');
     modal.className = 'payment-modal show';
     modal.id = 'paymentModal';
@@ -245,7 +383,7 @@ function showDodoPaymentRequired(amount, orderId) {
                 
                 <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 12px; margin: 20px 0;">
                     <h3 style="margin: 0 0 12px 0;">✅ Dodo Payments Required</h3>
-                    <p style="margin: 8px 0; font-size: 0.9rem;">For Mandi & Wholesaler purchases, professional payment gateway is mandatory.</p>
+                    <p style="margin: 8px 0; font-size: 0.9rem;">For wholesale purchases, professional payment gateway is mandatory.</p>
                 </div>
                 
                 <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin: 20px 0;">
@@ -262,23 +400,24 @@ function showDodoPaymentRequired(amount, orderId) {
                 
                 <div style="background: #fef3c7; border: 2px solid #f59e0b; padding: 16px; border-radius: 8px; margin: 20px 0;">
                     <h4 style="margin: 0 0 12px 0; color: #92400e;">⚠️ Registration Required</h4>
-                    <p style="margin: 8px 0; color: #78350f; font-size: 0.9rem;">You must create a Dodo Payments account to proceed with wholesale purchases.</p>
+                    <p style="margin: 8px 0; color: #78350f; font-size: 0.9rem;">You must complete Dodo Payments registration to proceed with wholesale purchases.</p>
                 </div>
                 
                 <div style="margin: 24px 0;">
                     <h4 style="margin: 0 0 12px 0;">🚀 Quick Setup (2 minutes):</h4>
                     <ol style="text-align: left; color: #374151; margin: 8px 0; padding-left: 20px; line-height: 1.8;">
                         <li>Go to <a href="https://app.dodopayments.com/signup" target="_blank" style="color: #7cb342; font-weight: 600;">app.dodopayments.com</a></li>
-                        <li>Sign up with business email</li>
+                        <li>Sign up with: <strong>${user ? user.email : 'your business email'}</strong></li>
                         <li>Verify your account</li>
                         <li>Get Business ID</li>
+                        <li>Update your profile with Business ID</li>
                         <li>Return here to complete payment</li>
                     </ol>
                 </div>
                 
                 <div class="payment-actions" style="gap: 12px;">
                     <a href="https://app.dodopayments.com/signup" target="_blank" class="payment-done-btn" style="text-decoration: none; display: block; text-align: center;">
-                        🚀 Register Now (Free)
+                        🚀 Register with Dodo
                     </a>
                     <button class="payment-cancel-btn" onclick="closePaymentModal()">
                         Cancel Order
@@ -286,7 +425,7 @@ function showDodoPaymentRequired(amount, orderId) {
                 </div>
                 
                 <p style="font-size: 0.75rem; color: #6b7280; margin-top: 16px; text-align: center;">
-                    Already have an account? Contact support to link your Dodo account.
+                    After registration, update your Business ID in your profile settings.
                 </p>
             </div>
         </div>
@@ -294,6 +433,18 @@ function showDodoPaymentRequired(amount, orderId) {
     `;
     
     document.body.appendChild(modal);
+}
+
+// Process Dodo Payment
+function processDodoPayment(orderId, businessName) {
+    closePaymentModal();
+    
+    setTimeout(() => {
+        alert(`✅ Payment Successful via Dodo Payments!\n\nOrder ID: ${orderId}\nBusiness: ${businessName}\n\nInvoice will be sent to your registered email.\n\nThank you for your wholesale order!`);
+        cart.clear();
+        closeCart();
+        updateCartDisplay();
+    }, 500);
 }
 
 function closePaymentModal() {

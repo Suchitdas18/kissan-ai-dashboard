@@ -504,6 +504,218 @@ body {
 }
 
 /* ===========================
+   VOICE/AUDIO SUPPORT
+   =========================== */
+
+/* Voice container for inline buttons */
+.voice-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* Individual voice buttons */
+.voice-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    border-radius: var(--radius-full);
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.25rem;
+    margin-left: var(--space-sm);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    transition: all 0.3s ease;
+    vertical-align: middle;
+    position: relative;
+    z-index: 10;
+}
+
+.voice-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.voice-btn:active {
+    transform: scale(0.95);
+}
+
+/* Speaking animation */
+.voice-btn.speaking {
+    animation: pulse-voice 1s ease-in-out infinite;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+@keyframes pulse-voice {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    50% {
+        transform: scale(1.15);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.5);
+    }
+}
+
+/* Floating voice assistant button */
+.voice-assistant-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--farmer-accent) 0%, var(--farmer-secondary) 100%);
+    border: none;
+    box-shadow: 0 8px 24px rgba(124, 179, 66, 0.4);
+    cursor: pointer;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.voice-assistant-btn:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 12px 32px rgba(124, 179, 66, 0.5);
+}
+
+.voice-assistant-btn:active {
+    transform: translateY(-2px) scale(1.05);
+}
+
+.voice-assistant-btn.speaking {
+    animation: pulse-assistant 0.8s ease-in-out infinite;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+@keyframes pulse-assistant {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+    }
+
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 12px 36px rgba(239, 68, 68, 0.6);
+    }
+}
+
+/* Voice button tooltip */
+.voice-btn::before {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.voice-btn:hover::before {
+    opacity: 1;
+}
+
+/* Adjust heading containers for voice buttons */
+h1.voice-container,
+h2.voice-container,
+h3.voice-container {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+/* Card title with voice button */
+.card-title.voice-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* Role card voice integration */
+.role-card .voice-btn {
+    position: absolute;
+    top: var(--space-md);
+    right: var(--space-md);
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+}
+
+/* Crop option voice button */
+.crop-option-btn .voice-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.crop-option-btn:hover .voice-btn {
+    opacity: 1;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .voice-assistant-btn {
+        width: 56px;
+        height: 56px;
+        bottom: 70px;
+        right: 16px;
+        font-size: 1.75rem;
+    }
+
+    .voice-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .crop-option-btn .voice-btn {
+        opacity: 1;
+        /* Always show on mobile */
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ===========================
    FARMER DASHBOARD SPECIFIC
    =========================== */
 

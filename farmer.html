@@ -10,16 +10,38 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="translations.js"></script>
+    <script src="lang-component.js"></script>
 </head>
 
 <body class="farmer-page">
     <div class="dashboard-container">
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <button class="language-btn" id="languageBtn">
+                <span class="language-icon">🌐</span>
+                <span class="language-text" id="currentLanguage">English</span>
+                <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="language-dropdown hidden" id="languageDropdown">
+                <div class="language-option" data-lang="en">English</div>
+                <div class="language-option" data-lang="hi">हिंदी (Hindi)</div>
+                <div class="language-option" data-lang="bn">বাংলা (Bengali)</div>
+                <div class="language-option" data-lang="ta">தமிழ் (Tamil)</div>
+                <div class="language-option" data-lang="te">తెలుగు (Telugu)</div>
+                <div class="language-option" data-lang="mr">मराठी (Marathi)</div>
+                <div class="language-option" data-lang="gu">ગુજરાતી (Gujarati)</div>
+                <div class="language-option" data-lang="kn">ಕನ್ನಡ (Kannada)</div>
+                <div class="language-option" data-lang="pa">ਪੰਜਾਬੀ (Punjabi)</div>
+            </div>
+        </div>
+
         <!-- Top Header -->
         <header class="dashboard-header farmer-header">
             <a href="index.html" class="back-btn">←</a>
             <div class="header-content">
-                <h1 class="app-name">🌾 Kissan AI</h1>
-                <p class="subtitle">Smart Crop & Soil Decisions</p>
+                <h1 class="app-name" id="appName">🌾 Kissan AI</h1>
+                <p class="subtitle" id="subtitle">Smart Crop & Soil Decisions</p>
             </div>
             <div class="profile-icon">👤</div>
         </header>
@@ -206,6 +228,7 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="farmer-lang-init.js"></script>
 </body>
 
 </html>

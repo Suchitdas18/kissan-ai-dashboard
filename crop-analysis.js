@@ -237,6 +237,9 @@ document.addEventListener('DOMContentLoaded', function () {
             preventionList.appendChild(li);
         });
 
+        // Load Medicine Recommendations (sorted by price)
+        loadMedicineRecommendations(data.name);
+
         // Show results section
         resultsSection.classList.remove('hidden');
         actionButtons.classList.remove('hidden');
@@ -287,4 +290,71 @@ function showNotification(message, type = 'info') {
             notification.remove();
         }, 300);
     }, 3000);
+}
+
+// Load Medicine Recommendations based on detected disease
+function loadMedicineRecommendations(diseaseName) {
+    const medicineGrid = document.getElementById('medicineGrid');
+    
+    if (!window.getAllMedicines) {
+        medicineGrid.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">Loading medicines...</p>';
+        return;
+    }
+    
+    // Extract disease keyword from disease name
+    let diseaseKeyword = '';
+    if (diseaseName.includes('Rust')) diseaseKeyword = 'Rust';
+    else if (diseaseName.includes('Blast')) diseaseKeyword = 'Blast';
+    else if (diseaseName.includes('Blight')) diseaseKeyword = 'Blight';
+    else {
+        medicineGrid.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">No specific medicines found</p>';
+        return;
+    }
+    
+    // Get all medicines
+    const allMedicines = getAllMedicines();
+    
+    // Filter medicines for this disease
+    const matchedMedicines = allMedicines.filter(med => {
+        if (med.disease) {
+            return med.disease.some(d => d.toLowerCase().includes(diseaseKeyword.toLowerCase()));
+        }
+        return false;
+    });
+    
+    if (matchedMedicines.length === 0) {
+        medicineGrid.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 20px;">No medicines available for this disease</p>';
+        return;
+    }
+    
+    // Sort by lowest price
+    matchedMedicines.sort((a, b) => {
+        const minPriceA = Math.min(...Object.values(a.price));
+        const minPriceB = Math.min(...Object.values(b.price));
+        return minPriceA - minPriceB;
+    });
+    
+    // Show top 3 medicines
+    const topMedicines = matchedMedicines.slice(0, 3);
+    
+    medicineGrid.innerHTML = topMedicines.map((med, index) => {
+        const minPrice = Math.min(...Object.values(med.price));
+        const maxPrice = Math.min(...Object.values(med.price));
+        const priceRange = minPrice === maxPrice ? `₹${minPrice}` : `₹${minPrice} - ₹${maxPrice}`;
+        
+        return `
+            <div class="medicine-card">
+                <div class="med-rank">#${index + 1}</div>
+                ${index === 0 ? '<div class="best-price">💰 Best Price</div>' : ''}
+                <div class="med-icon">${med.image}</div>
+                <h4 class="med-name">${med.brand}</h4>
+                <p class="med-generic">${med.name}</p>
+                <div class="med-price">${priceRange}</div>
+                <div class="med-rating">⭐ ${med.rating}/5</div>
+                <a href="shop.html?disease=${diseaseKeyword}" class="buy-now-btn">
+                    🛒 Buy Now
+                </a>
+            </div>
+        `;
+    }).join('');
 }

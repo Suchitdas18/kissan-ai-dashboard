@@ -7,9 +7,11 @@
     <title>Crop Analysis - Kissan AI</title>
     <meta name="description" content="Upload crop image for AI-powered disease detection">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="medicine-recommendations.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="medicines-db.js"></script>
 </head>
 
 <body class="farmer-page analysis-page">
@@ -92,6 +94,19 @@
                                 <li>Increase plant spacing</li>
                             </ul>
                         </div>
+
+                        <!-- Medicine Recommendations -->
+                        <div class="medicine-recommendations">
+                            <h3 class="medicine-title">🛒 Recommended Medicines (Lowest Price First)</h3>
+                            <p class="medicine-subtitle">सुझाए गए दवाइयाँ - सबसे सस्ती पहले</p>
+                            <div class="medicine-grid" id="medicineGrid">
+                                <!-- Medicines will be loaded here -->
+                            </div>
+                            <a href="shop.html" class="view-all-medicines-btn">
+                                <span>View All Medicines in Shop →</span>
+                            </a>
+                        </div>
+
                         <div class="prevention-tips">
                             <h3 class="prevention-title">🛡️ Prevention Tips</h3>
                             <p class="prevention-subtitle">रोकथाम के उपाय</p>

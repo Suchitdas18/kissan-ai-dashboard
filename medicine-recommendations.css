@@ -1,0 +1,144 @@
+/* Medicine Recommendations Section */
+.medicine-recommendations {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 2px solid #e5e7eb;
+}
+
+.medicine-title {
+    margin: 0 0 8px 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.medicine-subtitle {
+    margin: 0 0 16px 0;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.medicine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.medicine-card {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.medicine-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: var(--farmer-accent);
+}
+
+.med-rank {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.best-price {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.med-icon {
+    font-size: 2.5rem;
+    margin: 8px 0;
+}
+
+.med-name {
+    margin: 8px 0 4px 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.med-generic {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+    margin: 0 0 8px 0;
+}
+
+.med-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--farmer-accent);
+    margin: 8px 0;
+}
+
+.med-rating {
+    font-size: 0.875rem;
+    color: #f59e0b;
+    margin-bottom: 12px;
+}
+
+.buy-now-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(135deg, var(--farmer-accent), var(--farmer-secondary));
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+.buy-now-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(124, 179, 66, 0.3);
+}
+
+.view-all-medicines-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-all-medicines-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+    .medicine-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .med-icon {
+        font-size: 2rem;
+    }
+}

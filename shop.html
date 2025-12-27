@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Shop - Kissan AI</title>
+    <meta name="description" content="Buy agricultural medicines, pesticides, and fertilizers online">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="translations.js"></script>
+    <script src="medicines-db.js"></script>
+    <script src="cart.js"></script>
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body class="shop-page">
+    <div class="dashboard-container">
+        <!-- Top Header -->
+        <header class="dashboard-header farmer-header">
+            <a href="farmer.html" class="back-btn">←</a>
+            <div class="header-content">
+                <h1 class="app-name">🏪 Medicine Shop</h1>
+                <p class="subtitle">Agricultural Products & Solutions</p>
+            </div>
+            <button class="cart-icon-btn" onclick="openCart()">
+                🛒
+                <span class="cart-badge" id="cartBadge">0</span>
+            </button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Search & Filter -->
+            <section class="shop-controls">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search medicines, diseases, crops..." />
+                </div>
+
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-category="all">All Products</button>
+                    <button class="filter-tab" data-category="fungicides">Fungicides</button>
+                    <button class="filter-tab" data-category="insecticides">Insecticides</button>
+                    <button class="filter-tab" data-category="organic">Organic</button>
+                    <button class="filter-tab" data-category="fertilizers">Fertilizers</button>
+                </div>
+            </section>
+
+            <!-- Products Grid -->
+            <section class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here by JavaScript -->
+            </section>
+        </main>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar hidden" id="cartSidebar">
+        <div class="cart-header">
+            <h2>🛒 Your Cart</h2>
+            <button class="close-cart-btn" onclick="closeCart()">✕</button>
+        </div>
+
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be loaded here -->
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Amount:</span>
+                <span class="total-price" id="totalPrice">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="proceedToCheckout()">
+                <span>💳 Proceed to Payment</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="cart-overlay hidden" id="cartOverlay" onclick="closeCart()"></div>
+
+    <script>
+        // Load and display products
+        function loadProducts(category = 'all', searchQuery = '') {
+            const grid = document.getElementById('productsGrid');
+            let products = [];
+
+            if (category === 'all') {
+                products = getAllMedicines();
+            } else {
+                products = medicineDatabase[category] || [];
+            }
+
+            // Filter by search
+            if (searchQuery) {
+                products = searchMedicines(searchQuery);
+            }
+
+            if (products.length === 0) {
+                grid.innerHTML = '<p class="no-products">No products found</p>';
+                return;
+            }
+
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" data-id="${product.id}">
+                    <div class="product-icon">${product.image}</div>
+                    <div class="product-badge ${product.organic ? 'organic-badge' : ''}">${product.organic ? '🌿 Organic' : ''}</div>
+                    <h3 class="product-name">${product.brand}</h3>
+                    <p class="product-generic">${product.name}</p>
+                    ${product.disease ? `<p class="product-use">For: ${product.disease.slice(0, 2).join(', ')}</p>` : ''}
+                    ${product.pest ? `<p class="product-use">For: ${product.pest.slice(0, 2).join(', ')}</p>` : ''}
+                    <div class="product-rating">⭐ ${product.rating}/5</div>
+                    <div class="product-dosage">📏 ${product.dosage}</div>
+                    
+                    <div class="pack-selector">
+                        ${product.packSize.map(size => `
+                            <label class="pack-option">
+                                <input type="radio" name="pack_${product.id}" value="${size}" ${size === product.packSize[0] ? 'checked' : ''}>
+                                <span class="pack-label">
+                                    <span class="pack-size">${size}</span>
+                                    <span class="pack-price">₹${product.price[size]}</span>
+                                </span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    
+                    <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
+                        <span>🛒 Add to Cart</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Add to cart
+        function addToCart(medicineId) {
+            const radio = document.querySelector(`input[name="pack_${medicineId}"]:checked`);
+            const packSize = radio ? radio.value : null;
+
+            if (!packSize) {
+                alert('Please select a pack size');
+                return;
+            }
+
+            cart.addItem(medicineId, packSize, 1);
+            updateCartDisplay();
+        }
+
+        // Open cart
+        function openCart() {
+            document.getElementById('cartSidebar').classList.remove('hidden');
+            document.getElementById('cartOverlay').classList.remove('hidden');
+            updateCartDisplay();
+        }
+
+        // Close cart
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.add('hidden');
+            document.getElementById('cartOverlay').classList.add('hidden');
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            const totalPrice = document.getElementById('totalPrice');
+
+            if (cart.items.length === 0) {
+                cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+                totalPrice.textContent = '₹0';
+                return;
+            }
+
+            cartItems.innerHTML = cart.items.map((item, index) => `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.packSize}</p>
+                        <p class="cart-item-price">₹${item.price} × ${item.quantity}</p>
+                    </div>
+                    <div class="cart-item-controls">
+                        <button onclick="cart.updateQuantity(${index}, ${item.quantity - 1})">−</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="cart.updateQuantity(${index}, ${item.quantity + 1})">+</button>
+                        <button class="remove-btn" onclick="cart.removeItem(${index}); updateCartDisplay();">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+
+            totalPrice.textContent = '₹' + cart.getTotal();
+        }
+
+        // Proceed to checkout
+        function proceedToCheckout() {
+            if (cart.items.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            const amount = cart.getTotal() * 100; // Razorpay uses paise
+
+            const options = {
+                key: 'rzp_test_1DP5mmOlF5G5ag', // Replace with your Razorpay key
+                amount: amount,
+                currency: 'INR',
+                name: 'Kissan AI',
+                description: 'Agricultural Medicines Purchase',
+                image: 'https://yourdomain.com/logo.png',
+                handler: function (response) {
+                    alert('Payment Successful! Payment ID: ' + response.razorpay_payment_id);
+                    // Save order details
+                    console.log('Payment Response:', response);
+                    cart.clear();
+                    closeCart();
+                    updateCartDisplay();
+                },
+                prefill: {
+                    name: 'Farmer Name',
+                    email: 'farmer@example.com',
+                    contact: '9999999999'
+                },
+                theme: {
+                    color: '#7CB342'
+                }
+            };
+
+            const razorpay = new Razorpay(options);
+            razorpay.open();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            loadProducts();
+            cart.updateCartIcon();
+
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function () {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    loadProducts(this.getAttribute('data-category'));
+                });
+            });
+
+            // Search
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function () {
+                loadProducts('all', this.value);
+            });
+        });
+    </script>
+</body>
+
+</html>

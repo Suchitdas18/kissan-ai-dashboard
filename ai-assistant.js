@@ -268,7 +268,51 @@ class VoiceAssistant {
     generateResponse(message) {
         const lang = getCurrentLanguage();
         
-        // Comprehensive multilingual agriculture knowledge base
+        // Check farming knowledge database first (if available)
+        if (window.farmingKnowledge) {
+            // Check for crop-specific queries
+            for (const cropKey in window.farmingKnowledge.crops) {
+                const crop = window.farmingKnowledge.crops[cropKey];
+                const cropNames = [cropKey, crop.name.en.toLowerCase(), crop.name.hi];
+                
+                if (cropNames.some(name => message.includes(name))) {
+                    const info = crop;
+                    if (lang === 'en') {
+                        return `${info.name.en}: Plant ${info.plantingTime}, harvest ${info.harvestTime}. ` +
+                               `Needs ${info.soilType} soil, ${info.idealTemp} temperature. ` +
+                               `Use ${info.fertilizer.npk} NPK fertilizer. ` +
+                               `Common diseases: ${info.diseases[0].name} (${info.diseases[0].symptoms}). ` +
+                               `Expected yield: ${info.yield}. MSP: ${info.msp || info.avgPrice || 'Contact local mandi'}.`;
+                    }
+                }
+            }
+            
+            // Check for government schemes
+            if (message.includes('scheme') || message.includes('योजना') || message.includes('loan') || message.includes('subsidy')) {
+                if (lang === 'en') {
+                    return "Government schemes for farmers: PM-KISAN (₹6000/year), Kisan Credit Card (low interest loans), " +
+                           "Crop Insurance (PMFBY), and Soil Health Card (free testing). Visit pmkisan.gov.in or call 155261.";
+                } else {
+                    return "किसानों के लिए सरकारी योजनाएं: PM-KISAN (₹6000/वर्ष), किसान क्रेडिट कार्ड (कम ब्याज ऋण), " +
+                           "फसल बीमा (PMFBY), मृदा स्वास्थ्य कार्ड (मुफ्त परीक्षण)। pmkisan.gov.in देखें या 155261 पर कॉल करें।";
+                }
+            }
+            
+            // Check for organic farming
+            if (message.includes('organic') || message.includes('जैविक') || message.includes('compost')) {
+                if (lang === 'en') {
+                    return "Organic farming tips: Make vermicompost using red worms (45-60 days). " +
+                           "Use neem oil (3-5ml/liter) for pests. Plant green manure crops like Dhaincha. " +
+                           "Compost crop residue with animal waste (2-3 months). Avoid chemical pesticides.";
+                } else {
+                    return "जैविक खेती टिप्स: केंचुए से वर्मीकम्पोस्ट बनाएं (45-60 दिन)। " +
+                           "कीटों के लिए नीम तेल (3-5ml/लीटर) का उपयोग करें। ढैंचा जैसी हरी खाद फसलें लगाएं। " +
+                           "पशु अपशिष्ट के साथ फसल अवशेष कंपोस्ट करें। रासायनिक कीटनाशकों से बचें।";
+                }
+            }
+        }
+        
+        // Fallback to comprehensive multilingual responses
         const responses = {
             en: {
                 wheat: "Wheat grows best in cool weather. Plant between October-November in India. Common diseases include rust (brown/yellow spots), smut (black powder on grain), and blight. For fertilizer, use NPK in ratio 120:60:40 kg per hectare. Water regularly but avoid excess moisture. Harvest when grain moisture is 20-25%, usually 120-150 days after sowing. The grain should be golden yellow and hard when pressed.",

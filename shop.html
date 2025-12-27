@@ -14,8 +14,248 @@
     <script src="translations.js"></script>
     <script src="medicines-db.js"></script>
     <script src="cart.js"></script>
-    <!-- Razorpay SDK -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        /* Payment Modal Styles */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .payment-modal.show {
+            opacity: 1;
+        }
+
+        .payment-modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10001;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .payment-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+        }
+
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-modal-btn {
+            background: #f3f4f6;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .payment-amount {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #7cb342, #689f38);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .payment-methods {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .payment-method-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method-btn:hover {
+            border-color: #7cb342;
+            background: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+        }
+
+        .payment-name {
+            flex: 1;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .payment-tag {
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .payment-note {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .upi-qr-code {
+            max-width: 300px;
+            width: 100%;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 10px;
+            background: white;
+        }
+
+        .upi-id {
+            margin: 12px 0;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .amount-display {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #7cb342;
+            margin: 12px 0;
+        }
+
+        .payment-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .payment-done-btn,
+        .payment-cancel-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-done-btn {
+            background: linear-gradient(135deg, #7cb342, #689f38);
+            color: white;
+        }
+
+        .payment-cancel-btn {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .shop-quick-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--farmer-accent);
+        }
+
+        .shop-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .shop-feature {
+            text-align: center;
+            padding: var(--space-md);
+            background: white;
+            border-radius: var(--radius-md);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .feature-text {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .shop-enter-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            background: linear-gradient(135deg, var(--farmer-accent), var(--farmer-secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .shop-enter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(124, 179, 66, 0.3);
+        }
+
+        .shop-link-btn {
+            background: linear-gradient(135deg, var(--farmer-accent), var(--farmer-secondary));
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .shop-link-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 
 <body class="shop-page">
@@ -75,7 +315,7 @@
                 <span class="total-price" id="totalPrice">₹0</span>
             </div>
             <button class="checkout-btn" onclick="proceedToCheckout()">
-                <span>💳 Proceed to Payment</span>
+                <span>💳 Pay with UPI (FREE)</span>
             </button>
         </div>
     </div>
@@ -83,174 +323,7 @@
     <!-- Overlay -->
     <div class="cart-overlay hidden" id="cartOverlay" onclick="closeCart()"></div>
 
-    <script>
-        // Load and display products
-        function loadProducts(category = 'all', searchQuery = '') {
-            const grid = document.getElementById('productsGrid');
-            let products = [];
-
-            if (category === 'all') {
-                products = getAllMedicines();
-            } else {
-                products = medicineDatabase[category] || [];
-            }
-
-            // Filter by search
-            if (searchQuery) {
-                products = searchMedicines(searchQuery);
-            }
-
-            if (products.length === 0) {
-                grid.innerHTML = '<p class="no-products">No products found</p>';
-                return;
-            }
-
-            grid.innerHTML = products.map(product => `
-                <div class="product-card" data-id="${product.id}">
-                    <div class="product-icon">${product.image}</div>
-                    <div class="product-badge ${product.organic ? 'organic-badge' : ''}">${product.organic ? '🌿 Organic' : ''}</div>
-                    <h3 class="product-name">${product.brand}</h3>
-                    <p class="product-generic">${product.name}</p>
-                    ${product.disease ? `<p class="product-use">For: ${product.disease.slice(0, 2).join(', ')}</p>` : ''}
-                    ${product.pest ? `<p class="product-use">For: ${product.pest.slice(0, 2).join(', ')}</p>` : ''}
-                    <div class="product-rating">⭐ ${product.rating}/5</div>
-                    <div class="product-dosage">📏 ${product.dosage}</div>
-                    
-                    <div class="pack-selector">
-                        ${product.packSize.map(size => `
-                            <label class="pack-option">
-                                <input type="radio" name="pack_${product.id}" value="${size}" ${size === product.packSize[0] ? 'checked' : ''}>
-                                <span class="pack-label">
-                                    <span class="pack-size">${size}</span>
-                                    <span class="pack-price">₹${product.price[size]}</span>
-                                </span>
-                            </label>
-                        `).join('')}
-                    </div>
-                    
-                    <button class="add-to-cart-btn" onclick="addToCart('${product.id}')">
-                        <span>🛒 Add to Cart</span>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Add to cart
-        function addToCart(medicineId) {
-            const radio = document.querySelector(`input[name="pack_${medicineId}"]:checked`);
-            const packSize = radio ? radio.value : null;
-
-            if (!packSize) {
-                alert('Please select a pack size');
-                return;
-            }
-
-            cart.addItem(medicineId, packSize, 1);
-            updateCartDisplay();
-        }
-
-        // Open cart
-        function openCart() {
-            document.getElementById('cartSidebar').classList.remove('hidden');
-            document.getElementById('cartOverlay').classList.remove('hidden');
-            updateCartDisplay();
-        }
-
-        // Close cart
-        function closeCart() {
-            document.getElementById('cartSidebar').classList.add('hidden');
-            document.getElementById('cartOverlay').classList.add('hidden');
-        }
-
-        // Update cart display
-        function updateCartDisplay() {
-            const cartItems = document.getElementById('cartItems');
-            const totalPrice = document.getElementById('totalPrice');
-
-            if (cart.items.length === 0) {
-                cartItems.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
-                totalPrice.textContent = '₹0';
-                return;
-            }
-
-            cartItems.innerHTML = cart.items.map((item, index) => `
-                <div class="cart-item">
-                    <div class="cart-item-info">
-                        <h4>${item.name}</h4>
-                        <p>${item.packSize}</p>
-                        <p class="cart-item-price">₹${item.price} × ${item.quantity}</p>
-                    </div>
-                    <div class="cart-item-controls">
-                        <button onclick="cart.updateQuantity(${index}, ${item.quantity - 1})">−</button>
-                        <span>${item.quantity}</span>
-                        <button onclick="cart.updateQuantity(${index}, ${item.quantity + 1})">+</button>
-                        <button class="remove-btn" onclick="cart.removeItem(${index}); updateCartDisplay();">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-
-            totalPrice.textContent = '₹' + cart.getTotal();
-        }
-
-        // Proceed to checkout
-        function proceedToCheckout() {
-            if (cart.items.length === 0) {
-                alert('Your cart is empty!');
-                return;
-            }
-
-            const amount = cart.getTotal() * 100; // Razorpay uses paise
-
-            const options = {
-                key: 'rzp_test_1DP5mmOlF5G5ag', // Replace with your Razorpay key
-                amount: amount,
-                currency: 'INR',
-                name: 'Kissan AI',
-                description: 'Agricultural Medicines Purchase',
-                image: 'https://yourdomain.com/logo.png',
-                handler: function (response) {
-                    alert('Payment Successful! Payment ID: ' + response.razorpay_payment_id);
-                    // Save order details
-                    console.log('Payment Response:', response);
-                    cart.clear();
-                    closeCart();
-                    updateCartDisplay();
-                },
-                prefill: {
-                    name: 'Farmer Name',
-                    email: 'farmer@example.com',
-                    contact: '9999999999'
-                },
-                theme: {
-                    color: '#7CB342'
-                }
-            };
-
-            const razorpay = new Razorpay(options);
-            razorpay.open();
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            loadProducts();
-            cart.updateCartIcon();
-
-            // Filter tabs
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', function () {
-                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    loadProducts(this.getAttribute('data-category'));
-                });
-            });
-
-            // Search
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', function () {
-                loadProducts('all', this.value);
-            });
-        });
-    </script>
+    <script src="shop-payment.js"></script>
 </body>
 
 </html>

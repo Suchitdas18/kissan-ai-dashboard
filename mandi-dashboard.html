@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandi Dashboard - Kissan AI</title>
+    <meta name="description" content="Mandi and wholesaler dashboard for crop trading">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="mandi-page">
+    <div class="dashboard-container">
+        <!-- Top Header -->
+        <header class="dashboard-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <a href="index.html" class="back-btn">←</a>
+            <div class="header-content">
+                <h1 class="app-name">🏪 Kissan AI - Mandi</h1>
+                <p class="subtitle" id="userGreeting">Welcome, Wholesaler!</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Welcome Card -->
+            <section class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="card-body">
+                    <h2 style="margin: 0 0 12px 0;">Welcome to Mandi Portal</h2>
+                    <p style="margin: 0; opacity: 0.9;">Access wholesale products, manage orders, and track payments</p>
+                </div>
+            </section>
+
+            <!-- Quick Actions Grid -->
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 24px;">
+                <!-- Medicine Shop -->
+                <section class="card action-card">
+                    <div class="card-header">
+                        <h3 class="card-title">💊 Medicine Shop</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--gray-600); margin-bottom: 16px;">Buy pesticides, fertilizers, and
+                            agricultural medicines at wholesale prices</p>
+                        <a href="shop.html" class="action-btn">
+                            <span>Browse Products</span>
+                            <span>→</span>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Crop Trading (Coming Soon) -->
+                <section class="card action-card">
+                    <div class="card-header">
+                        <h3 class="card-title">🌾 Crop Trading</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--gray-600); margin-bottom: 16px;">Buy and sell crops directly from farmers
+                        </p>
+                        <button class="action-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            <span>Coming Soon</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Market Prices -->
+                <section class="card action-card">
+                    <div class="card-header">
+                        <h3 class="card-title">📊 Market Prices</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--gray-600); margin-bottom: 16px;">View live crop prices and market trends
+                        </p>
+                        <button class="action-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            <span>Coming Soon</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- My Orders -->
+                <section class="card action-card">
+                    <div class="card-header">
+                        <h3 class="card-title">📦 My Orders</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--gray-600); margin-bottom: 16px;">Track your orders and payment status</p>
+                        <button class="action-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                            <span>Coming Soon</span>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Business Info -->
+            <section class="card" style="margin-top: 24px;">
+                <div class="card-header">
+                    <h2 class="card-title">🏢 Your Business Profile</h2>
+                </div>
+                <div class="card-body">
+                    <div id="businessInfo"
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <style>
+        .mandi-page {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .action-card {
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:not([disabled]):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .info-item {
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+    </style>
+
+    <script>
+        // Load user info
+        window.addEventListener('DOMContentLoaded', function () {
+            const currentUser = JSON.parse(localStorage.getItem('currentMandiUser'));
+
+            if (!currentUser) {
+                // Not logged in, redirect to auth
+                window.location.href = 'mandi-auth.html';
+                return;
+            }
+
+            // Update greeting
+            document.getElementById('userGreeting').textContent = `Welcome, ${currentUser.businessName}!`;
+
+            // Display business info
+            const businessInfo = document.getElementById('businessInfo');
+            businessInfo.innerHTML = `
+                <div class="info-item">
+                    <div class="info-label">Business Name</div>
+                    <div class="info-value">${currentUser.businessName}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Mandi ID</div>
+                    <div class="info-value">${currentUser.mandiId}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Business Type</div>
+                    <div class="info-value">${currentUser.businessType.charAt(0).toUpperCase() + currentUser.businessType.slice(1)}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">${currentUser.email}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Phone</div>
+                    <div class="info-value">${currentUser.phone}</div>
+                </div>
+                ${currentUser.gstNumber ? `
+                <div class="info-item">
+                    <div class="info-label">GST Number</div>
+                    <div class="info-value">${currentUser.gstNumber}</div>
+                </div>
+                ` : ''}
+                <div class="info-item">
+                    <div class="info-label">Dodo Payment Status</div>
+                    <div class="info-value">${currentUser.dodoRegistered ? '✅ Registered' : '⚠️ Pending'}</div>
+                </div>
+            `;
+        });
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentMandiUser');
+                localStorage.removeItem('userRole');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -38,10 +38,10 @@ function handleLogin(event) {
         localStorage.setItem('currentMandiUser', JSON.stringify(user));
         localStorage.setItem('userRole', user.businessType);
         
-        showSuccess('✅ Login successful! Redirecting to shop...');
+        showSuccess('✅ Login successful! Redirecting to dashboard...');
         
         setTimeout(() => {
-            window.location.href = 'shop.html';
+            window.location.href = 'mandi-dashboard.html';
         }, 1500);
     } else {
         showError('❌ Invalid credentials. Please check your email and password.');
@@ -116,7 +116,7 @@ function handleRegister(event) {
         localStorage.setItem('currentMandiUser', JSON.stringify(newUser));
         localStorage.setItem('userRole', newUser.businessType);
         
-        window.location.href = 'shop.html';
+        window.location.href = 'mandi-dashboard.html';
     }, 3000);
 }
 
@@ -167,7 +167,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const user = JSON.parse(currentUser);
         showSuccess(`Already logged in as ${user.businessName}. Redirecting...`);
         setTimeout(() => {
-            window.location.href = 'shop.html';
+            window.location.href = 'mandi-dashboard.html';
         }, 1500);
     }
 });

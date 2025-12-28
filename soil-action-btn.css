@@ -1,0 +1,39 @@
+/* Soil Actions Button */
+.soil-actions {
+    margin-top: var(--space-lg);
+    text-align: center;
+}
+
+.analyze-soil-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, var(--farmer-accent), var(--farmer-secondary));
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(124, 179, 66, 0.3);
+}
+
+.analyze-soil-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 179, 66, 0.4);
+}
+
+.analyze-soil-btn .btn-icon {
+    font-size: 1.25rem;
+}
+
+.analyze-soil-btn .btn-arrow {
+    font-size: 1.125rem;
+}
+
+.analyze-hint {
+    margin-top: var(--space-sm);
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}

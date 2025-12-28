@@ -1,0 +1,350 @@
+/* Soil Analysis Page Styles */
+
+.upload-info {
+    text-align: center;
+    color: var(--gray-600);
+    margin-bottom: var(--space-lg);
+    font-size: 0.9rem;
+}
+
+/* Results Section */
+.results-section {
+    margin-top: var(--space-xl);
+}
+
+.results-section.hidden {
+    display: none;
+}
+
+/* Soil Type Card */
+.soil-type-card {
+    background: linear-gradient(135deg, #7cb342 0%, #689f38 100%);
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--space-xl);
+    color: white;
+}
+
+.section-title {
+    margin: 0 0 var(--space-lg) 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.soil-type-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.soil-badge {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.soil-type-name {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.soil-health-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+}
+
+.health-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.soil-health-indicator.healthy .health-dot {
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.soil-health-indicator.moderate .health-dot {
+    background: #f59e0b;
+    box-shadow: 0 0 8px #f59e0b;
+}
+
+.soil-health-indicator.poor .health-dot {
+    background: #ef4444;
+    box-shadow: 0 0 8px #ef4444;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.metric-card {
+    background: white;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.metric-icon {
+    font-size: 2.5rem;
+}
+
+.metric-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin-bottom: 4px;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--farmer-accent);
+}
+
+/* Recommendations Section */
+.recommendations-section {
+    margin-bottom: var(--space-xl);
+}
+
+.rec-section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--gray-900);
+}
+
+.rec-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0 0 var(--space-lg) 0;
+}
+
+.crops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-lg);
+}
+
+.crop-card {
+    background: white;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.crop-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.crop-emoji {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.crop-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 var(--space-md) 0;
+    color: var(--gray-900);
+}
+
+.crop-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.crop-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+}
+
+.detail-label {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.detail-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+.yield-high {
+    color: #22c55e;
+}
+
+.yield-medium {
+    color: #f59e0b;
+}
+
+.yield-low {
+    color: #ef4444;
+}
+
+/* Season Section */
+.season-section {
+    margin-bottom: var(--space-xl);
+}
+
+.season-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--gray-900);
+}
+
+.season-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0 0 var(--space-lg) 0;
+}
+
+.season-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+}
+
+.season-card {
+    background: white;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.season-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.season-card.best-season {
+    border-color: var(--farmer-accent);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+.best-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.season-name {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--gray-900);
+}
+
+.season-months {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0;
+}
+
+/* Tips Section */
+.tips-section {
+    margin-bottom: var(--space-xl);
+}
+
+.tips-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: var(--gray-900);
+}
+
+.tips-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0 0 var(--space-lg) 0;
+}
+
+.tips-list {
+    background: white;
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    margin: 0;
+}
+
+.tips-list li {
+    padding: var(--space-md);
+    border-left: 4px solid var(--farmer-accent);
+    margin-bottom: var(--space-md);
+    background: var(--gray-50);
+    border-radius: 4px;
+    line-height: 1.6;
+}
+
+.tips-list li:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .soil-type-card {
+        padding: var(--space-lg);
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+    }
+
+    .soil-type-name {
+        font-size: 1.5rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+
+    .crops-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .season-cards {
+        grid-template-columns: 1fr;
+    }
+}
